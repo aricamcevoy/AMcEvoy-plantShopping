@@ -1,4 +1,4 @@
-import { createSlice, isPlainObject } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
 export const CartSlice = createSlice({
   name: 'cart',
@@ -7,14 +7,12 @@ export const CartSlice = createSlice({
   },
   reducers: {
     addItem: (state, action) => {
-        console.log('Dispatching addItem with payload:', action.payload);
         const { name, image, cost } = action.payload;
         const itemExists = state.items.find(item => item.name === name);
         if (!itemExists) {
-            console.log('Adding item to state:', action.payload)
             state.items.push({ name, image, cost, quantity: 1 });
         } else {
-            console.log('Item already exists in state:', action.payload);
+            alert('Item Already in Cart');
         }
     },
 
@@ -32,6 +30,10 @@ export const CartSlice = createSlice({
     },
   },
 );
+
+export const selectTotalItems = (state) => {
+    return state.cart.items.reduce((total, item) => total + (item.quantity || 1), 0);
+};
 
 export const { addItem, removeItem, updateQuantity } = CartSlice.actions;
 
