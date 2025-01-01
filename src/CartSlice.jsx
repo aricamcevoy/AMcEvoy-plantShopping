@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, isPlainObject } from '@reduxjs/toolkit';
 
 export const CartSlice = createSlice({
   name: 'cart',
@@ -7,16 +7,19 @@ export const CartSlice = createSlice({
   },
   reducers: {
     addItem: (state, action) => {
+        console.log('Dispatching addItem with payload:', action.payload);
         const { name, image, cost } = action.payload;
-        const existingItem = state.items.find(item => item.name === name);
-        if (existingItem) {
-            exitingItem.quantity++;
+        const itemExists = state.items.find(item => item.name === name);
+        if (!itemExists) {
+            console.log('Adding item to state:', action.payload)
+            state.items.push({ name, image, cost, quantity: 1 });
         } else {
-            state.items.push({ name, image, cost, quantity: 1});
+            console.log('Item already exists in state:', action.payload);
         }
     },
+
     removeItem: (state, action) => {
-        const item = state.items.filter(item => item.name !== action.payload);
+        state.items = state.items.filter(item => item.name !== action.payload);
         }
     },
     updateQuantity: (state, action) => {
